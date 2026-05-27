@@ -9,12 +9,14 @@
 
 1. Добавьте в код Dockerfile, который позволит запустить web-приложение с исходным кодом в каталоге app/ через docker.
    [Dockerfile](https://github.com/dvorfe30-io/lab07docker/blob/main/app/Dockerfile)
+
 2. Выполните запуск контейнера с этим приложением.
    ```
    $ sudo docker build -t lab-docker-app .
    ```
-   <details><summary>Вывод</summary>
-   '''
+   
+<details><summary>Вывод</summary>
+<pre><code class="language-bash">
 [+] Building 42.0s (10/10) FINISHED                                        docker:default
  => [internal] load build definition from Dockerfile                                 0.0s
  => => transferring dockerfile: 186B                                                 0.0s
@@ -37,13 +39,16 @@
  => => exporting manifest list sha256:3c19cb535af367f672e84624eb0d72c2e161bd8de5737  0.0s
  => => naming to docker.io/library/lab-docker-app:latest                             0.0s
  => => unpacking to docker.io/library/lab-docker-app:latest 
- '''
-   </details>
-```
-sudo docker run -d -p 5000:5000 --name app-container lab-docker-app
-244c6c00325a275e7c7cb555f03f0f0b7d4442f04046c1d7c03f5c1c4fa81877
+</code></pre>
+</details>
 
-sudo docker logs app-container
+```
+$ sudo docker run -d -p 5000:5000 --name app-container lab-docker-app
+244c6c00325a275e7c7cb555f03f0f0b7d4442f04046c1d7c03f5c1c4fa81877
+```
+
+```
+$ sudo docker logs app-container
  * Serving Flask app 'app'
  * Debug mode: off
 WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
@@ -51,9 +56,8 @@ WARNING: This is a development server. Do not use it in a production deployment.
  * Running on http://127.0.0.1:5000
  * Running on http://172.17.0.2:5000
 ```
-   
 3. Скопируйте из консоли в каталог /home/ контейнера файл README.md.
-```
+```   
 $ sudo docker cp ../README.md app-container:/home/README.md
 Successfully copied 4.44kB (transferred 6.14kB) to app-container:/home/README.md
 ```
@@ -77,11 +81,13 @@ sudo docker stop app-container
 ## Часть II. Docker compose
 1. Создайте файл docker-compose.yml таким образом, чтобы совместно с описанным в части 1 контейнером работала бы база данных mysql. Файл инициализации БД в каталоге db/init.sql. Также пропишите порт подключения к приложению. Например 5000.
 [docker-compose.yml](https://github.com/dvorfe30-io/lab07docker/blob/main/docker-compose.yml)
-2. Запустите связку web-приложение - БД.
+
+3. Запустите связку web-приложение - БД.
 ```
 $ sudo docker compose up --build 
 ```
 <details><summary>Вывод</summary>
+<pre><code class="language-bash">
 [+] Building 22.2s (12/12) FINISHED                                                       
  => [internal] load local bake definitions                                           0.0s
  => => reading from stdin 504B                                                       0.0s
@@ -174,11 +180,15 @@ lab_dockerP2  |  * Running on all addresses (0.0.0.0)
 lab_dockerP2  |  * Running on http://127.0.0.1:5000
 lab_dockerP2  |  * Running on http://172.18.0.3:5000
 lab_dockerP2  | Press CTRL+C to quit
-
+</code></pre>
 </details>
+
 3. Проверьте подключение к приложению через браузер. Сделайте снимок экрана.
-[Снимок экрана](https://github.com/dvorfe30-io/lab07docker/blob/main/Screenshot.png)
+
+[Screenshot](https://github.com/dvorfe30-io/lab07docker/blob/main/Screenshot.png)
+
 4. Проверьте работу приложения через браузер.
+
 ```
 $ curl http://localhost:5000
 <!DOCTYPE html>
@@ -198,5 +208,3 @@ $ curl http://localhost:5000
 </body>
 </html>
 ```
-
-
