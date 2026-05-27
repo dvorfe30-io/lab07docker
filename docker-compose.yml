@@ -1,0 +1,36 @@
+
+services:
+  app:
+    build: ./app 
+    container_name: lab_dockerP2
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_USER=maa
+      - DB_PASS=maa44
+      - DB_NAME=maadb
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: maarp
+      MYSQL_DATABASE: maadb
+      MYSQL_USER: maa
+      MYSQL_PASSWORD: maa44
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data:
